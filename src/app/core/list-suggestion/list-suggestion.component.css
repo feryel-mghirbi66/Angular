@@ -1,0 +1,167 @@
+/* ===== Global ===== */
+* {
+    box-sizing: border-box;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+  }
+  
+  h2 {
+    text-align: center;
+    margin: 40px 0 30px;
+    font-weight: 700;
+    color: #1f2937;
+    letter-spacing: 0.5px;
+  }
+  
+  /* ===== Search bar ===== */
+  input[type="text"] {
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+  
+  input[type="text"]:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+  }
+  
+  /* ===== Card ===== */
+  .card {
+    background: linear-gradient(180deg, #ffffff, #fafafa);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    border: 1px solid #f1f5f9;
+  }
+  
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  }
+  
+  /* ===== Card header ===== */
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 6px;
+  }
+  
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 14px;
+  }
+  
+  .category {
+    color: #2563eb;
+    font-weight: 600;
+  }
+  
+  /* ===== Description ===== */
+  .card-description {
+    font-size: 14px;
+    color: #374151;
+    line-height: 1.6;
+    margin-bottom: 18px;
+  }
+  
+  /* ===== Status badges ===== */
+  .status {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 16px;
+  }
+  
+  .status.acceptee {
+    background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+    color: #14532d;
+  }
+  
+  .status.refusee {
+    background: linear-gradient(135deg, #fee2e2, #fecaca);
+    color: #7f1d1d;
+  }
+  
+  .status.en_attente {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    color: #78350f;
+  }
+  
+  /* ===== Actions ===== */
+  .actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 10px;
+  }
+  
+  /* ===== Like button ===== */
+  .like-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #ffffff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 6px 15px rgba(37, 99, 235, 0.35);
+  }
+  
+  .like-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(37, 99, 235, 0.45);
+  }
+  
+  .like-btn:active {
+    transform: scale(0.96);
+  }
+  
+  /* ===== Favorite button ===== */
+  .fav-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  
+  .fav-btn:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+  }
+  
+  .fav-btn:active {
+    transform: scale(0.96);
+  }
+  
+  /* ===== Disabled (refused) ===== */
+  .card.refusee {
+    opacity: 0.65;
+    filter: grayscale(20%);
+  }
+  

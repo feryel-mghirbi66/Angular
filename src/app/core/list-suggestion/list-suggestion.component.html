@@ -1,0 +1,43 @@
+<h2>Liste des suggestions</h2>
+
+<div *ngFor="let s of suggestions">
+  <h3>{{ s.title }}</h3>
+  <p>{{ s.description }}</p>
+  <p><b>Catégorie :</b> {{ s.category }}</p>
+  <p><b>Date :</b> {{ s.date | date : "dd/MM/yyyy" }}</p>
+  <p><b>Status :</b> {{ s.status }}</p>
+  <p><b>Likes :</b> {{ s.nbLikes }}</p>
+
+  <div *ngIf="s.status !== 'refusee'">
+    <button (click)="likeSuggestion(s)">Like</button>
+    <button (click)="addToFavorites(s)">Ajouter aux favoris</button>
+  </div>
+
+  <hr />
+</div>
+<div class="card" *ngFor="let s of suggestions" [ngClass]="s.status">
+  <div class="card-title">{{ s.title }}</div>
+
+  <div class="card-meta">
+    <span class="category">{{ s.category }}</span>
+    <span>{{ s.date | date : "dd MMM yyyy" }}</span>
+  </div>
+
+  <div class="card-description">
+    {{ s.description }}
+  </div>
+
+  <span class="status {{ s.status }}">
+    {{ s.status }}
+  </span>
+
+  <div class="actions" *ngIf="s.status !== 'refusee'">
+    <button class="like-btn" (click)="likeSuggestion(s)">
+      👍 Like {{ s.nbLikes }}
+    </button>
+
+    <button class="fav-btn" (click)="addToFavorites(s)">
+      ♡ Ajouter aux favoris
+    </button>
+  </div>
+</div>
