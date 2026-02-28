@@ -1,0 +1,86 @@
+<div class="form-wrapper">
+  <div class="form-card">
+    <div class="form-header">
+      <div class="form-icon">💡</div>
+      <h1>Nouvelle Suggestion</h1>
+      <p>Partagez vos idées pour améliorer notre environnement de travail</p>
+    </div>
+
+    <form [formGroup]="suggestionForm" (ngSubmit)="submit()">
+      <div class="field">
+        <label>Titre</label>
+        <input
+          type="text"
+          formControlName="title"
+          placeholder="Ex: Améliorer la salle de pause..."
+        />
+        <div class="error" *ngIf="title?.touched && title?.errors">
+          <span *ngIf="title?.errors?.['required']"
+            >❌ Le titre est obligatoire</span
+          >
+          <span *ngIf="title?.errors?.['minlength']"
+            >❌ Minimum 5 caractères requis</span
+          >
+          <span *ngIf="title?.errors?.['pattern']"
+            >❌ Doit commencer par une majuscule (lettres et espaces
+            uniquement)</span
+          >
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Description</label>
+        <textarea
+          formControlName="description"
+          rows="4"
+          placeholder="Décrivez votre suggestion en détail..."
+        ></textarea>
+        <div class="error" *ngIf="description?.touched && description?.errors">
+          <span *ngIf="description?.errors?.['required']"
+            >❌ La description est obligatoire</span
+          >
+          <span *ngIf="description?.errors?.['minlength']">
+            ❌ Minimum 30 caractères ({{ description?.value?.length }}/30)
+          </span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Catégorie</label>
+        <select formControlName="category">
+          <option value="">-- Choisir une catégorie --</option>
+          <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+        </select>
+        <div class="error" *ngIf="category?.touched && category?.errors">
+          <span *ngIf="category?.errors?.['required']"
+            >❌ Veuillez choisir une catégorie</span
+          >
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Date</label>
+          <input type="date" formControlName="date" />
+        </div>
+        <div class="field">
+          <label>Statut</label>
+          <input type="text" formControlName="status" />
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="cancel()">
+          Annuler
+        </button>
+        <button
+          type="submit"
+          class="btn-submit"
+          [disabled]="suggestionForm.invalid"
+        >
+          Soumettre ✨
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

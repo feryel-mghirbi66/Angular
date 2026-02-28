@@ -1,0 +1,42 @@
+<div *ngIf="suggestion; else notFound">
+  <h2>Détails de la Suggestion</h2>
+
+  <table cellpadding="8" cellspacing="0">
+    <tr>
+      <th>ID</th>
+      <td>{{ suggestion.id }}</td>
+    </tr>
+    <tr>
+      <th>Titre</th>
+      <td>{{ suggestion.title }}</td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td>{{ suggestion.description }}</td>
+    </tr>
+    <tr>
+      <th>Catégorie</th>
+      <td>{{ suggestion.category }}</td>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <td>{{ suggestion.date | date : "dd/MM/yyyy" }}</td>
+    </tr>
+    <tr>
+      <th>Statut</th>
+      <td>{{ suggestion.status }}</td>
+    </tr>
+    <tr>
+      <th>Likes</th>
+      <td>{{ suggestion.nbLikes }}</td>
+    </tr>
+  </table>
+
+  <br />
+  <button (click)="backToList()">⬅ Back to list</button>
+</div>
+
+<ng-template #notFound>
+  <p>Suggestion introuvable.</p>
+  <button (click)="backToList()">⬅ Back to list</button>
+</ng-template>

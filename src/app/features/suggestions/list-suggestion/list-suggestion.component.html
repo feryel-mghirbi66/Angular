@@ -16,7 +16,10 @@
   <hr />
 </div>
 <div class="card" *ngFor="let s of suggestions" [ngClass]="s.status">
-  <div class="card-title">{{ s.title }}</div>
+  <div class="card-title">
+    {{ s.title }}
+    <a [routerLink]="[s.id]">{{ s.title }}</a>
+  </div>
 
   <div class="card-meta">
     <span class="category">{{ s.category }}</span>
@@ -32,6 +35,7 @@
   </span>
 
   <div class="actions" *ngIf="s.status !== 'refusee'">
+    <button (click)="goToDetails(s)">Details</button>
     <button class="like-btn" (click)="likeSuggestion(s)">
       👍 Like {{ s.nbLikes }}
     </button>
@@ -40,4 +44,14 @@
       ♡ Ajouter aux favoris
     </button>
   </div>
+</div>
+<button class="btn btn-primary" (click)="goToAddForm()">
+  Ajouter suggestion
+</button>
+
+<hr />
+
+<div *ngFor="let s of suggestions" (click)="goToDetails(s)">
+  <h3>{{ s.title }}</h3>
+  <p>{{ s.description }}</p>
 </div>
