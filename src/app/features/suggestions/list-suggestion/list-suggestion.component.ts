@@ -1,83 +1,97 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { SuggestionService } from '../../../core/Services/suggestion.service';
 import { Suggestion } from '../../../models/suggestion';
+import { filter, Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-suggestion-list',           
+  selector: 'app-suggestion-list',
   templateUrl: './list-suggestion.component.html',
   styleUrls: ['./list-suggestion.component.css']
 })
-export class ListSuggestionComponent implements OnInit { 
+export class ListSuggestionComponent implements OnInit, OnDestroy {
 
-  suggestions: Suggestion[] = [
-    {
-      id: 1,
-      title: 'Organiser une journée team building',
-      description: 'Suggestion pour organiser une journée de team building pour renforcer les liens entre les membres de l\'équipe.',
-      category: 'Événements',
-      date: new Date('2025-01-20'),
-      status: 'acceptée',
-      nbLikes: 10
-    },
-    {
-      id: 2,
-      title: 'Améliorer le système de réservation',
-      description: 'Proposition pour améliorer la gestion des réservations en ligne avec un système de confirmation automatique.',
-      category: 'Technologie',
-      date: new Date('2025-01-15'),
-      status: 'refusée',
-      nbLikes: 0
-    },
-    {
-      id: 3,
-      title: 'Créer un système de récompenses',
-      description: 'Mise en place d\'un programme de récompenses pour motiver les employés et reconnaître leurs efforts.',
-      category: 'Ressources Humaines',
-      date: new Date('2025-01-25'),
-      status: 'refusée',
-      nbLikes: 5
-    },
-    {
-      id: 4,
-      title: 'Moderniser l\'interface utilisateur',
-      description: 'Refonte complète de l\'interface utilisateur pour une meilleure expérience utilisateur.',
-      category: 'Technologie',
-      date: new Date('2025-01-30'),
-      status: 'en_attente',
-      nbLikes: 0
-    }
-  ];
-
+  suggestions: Suggestion[] = [];
   favorites: Suggestion[] = [];
+  private routerSub!: Subscription;
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private suggestionService: SuggestionService
   ) {}
 
   ngOnInit(): void {
-    const saved = JSON.parse(localStorage.getItem('suggestions') || '[]');
-    const parsed = saved.map((s: any) => ({ ...s, date: new Date(s.date) }));
-    this.suggestions = [...this.suggestions, ...parsed];
+    this.loadSuggestions();
+
+    this.routerSub = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: any) => {
+      // Only reload when we're back on the list route
+      if (event.urlAfterRedirects === '/suggestions') {
+        this.loadSuggestions();
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.routerSub) {
+      this.routerSub.unsubscribe();
+    }
+  }
+
+  loadSuggestions(): void {
+    this.suggestionService.getSuggestionList().subscribe({
+      next: (data: Suggestion[]) => this.suggestions = data,
+      error: (err: any) => console.error('Erreur chargement:', err)
+    });
   }
 
   goToDetails(s: Suggestion): void {
-
     this.router.navigate([s.id], { relativeTo: this.route });
   }
 
   likeSuggestion(s: Suggestion): void {
     s.nbLikes++;
+    this.suggestionService.updateSuggestion(s).subscribe({
+      error: (err: any) => {
+        s.nbLikes--;
+        console.error('Erreur like:', err);
+      }
+    });
+  }
+
+  isInFavorites(s: Suggestion): boolean {
+    return this.favorites.some(f => f.id === s.id);
   }
 
   addToFavorites(s: Suggestion): void {
-    if (!this.favorites.some(f => f.id === s.id)) {   
+    if (!this.isInFavorites(s)) {
       this.favorites.push(s);
     }
   }
 
+  removeFromFavorites(s: Suggestion): void {
+    this.favorites = this.favorites.filter(f => f.id !== s.id);
+  }
+
+  toggleFavorite(s: Suggestion): void {
+    this.isInFavorites(s) ? this.removeFromFavorites(s) : this.addToFavorites(s);
+  }
 
   goToAddForm(): void {
     this.router.navigate(['add'], { relativeTo: this.route });
+  }
+
+  goToEditForm(id: number): void {
+    this.router.navigate(['edit', id], { relativeTo: this.route });
+  }
+
+  deleteSuggestion(id: number): void {
+    if (!confirm('Voulez-vous vraiment supprimer cette suggestion ?')) return;
+    this.suggestionService.deleteSuggestion(id).subscribe({
+      next: () => this.loadSuggestions(),
+      error: (err: any) => console.error('Erreur suppression:', err)
+    });
   }
 }

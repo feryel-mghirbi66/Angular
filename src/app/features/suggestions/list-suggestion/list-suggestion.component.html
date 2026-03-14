@@ -1,57 +1,44 @@
-<h2>Liste des suggestions</h2>
-
-<div *ngFor="let s of suggestions">
-  <h3>{{ s.title }}</h3>
-  <p>{{ s.description }}</p>
-  <p><b>Catégorie :</b> {{ s.category }}</p>
-  <p><b>Date :</b> {{ s.date | date : "dd/MM/yyyy" }}</p>
-  <p><b>Status :</b> {{ s.status }}</p>
-  <p><b>Likes :</b> {{ s.nbLikes }}</p>
-
-  <div *ngIf="s.status !== 'refusee'">
-    <button (click)="likeSuggestion(s)">Like</button>
-    <button (click)="addToFavorites(s)">Ajouter aux favoris</button>
-  </div>
-
-  <hr />
-</div>
-<div class="card" *ngFor="let s of suggestions" [ngClass]="s.status">
-  <div class="card-title">
-    {{ s.title }}
-    <a [routerLink]="[s.id]">{{ s.title }}</a>
-  </div>
-
-  <div class="card-meta">
-    <span class="category">{{ s.category }}</span>
-    <span>{{ s.date | date : "dd MMM yyyy" }}</span>
-  </div>
-
-  <div class="card-description">
-    {{ s.description }}
-  </div>
-
-  <span class="status {{ s.status }}">
-    {{ s.status }}
-  </span>
-
-  <div class="actions" *ngIf="s.status !== 'refusee'">
-    <button (click)="goToDetails(s)">Details</button>
-    <button class="like-btn" (click)="likeSuggestion(s)">
-      👍 Like {{ s.nbLikes }}
-    </button>
-
-    <button class="fav-btn" (click)="addToFavorites(s)">
-      ♡ Ajouter aux favoris
+<div class="list-container">
+  <div class="list-header">
+    <h2>Liste des Suggestions</h2>
+    <button class="btn-add" (click)="goToAddForm()">
+      ➕ Ajouter une suggestion
     </button>
   </div>
-</div>
-<button class="btn btn-primary" (click)="goToAddForm()">
-  Ajouter suggestion
-</button>
 
-<hr />
+  <div class="card" *ngFor="let s of suggestions" [ngClass]="s.status">
+    <div class="card-header">
+      <div class="card-title">
+        <a [routerLink]="[s.id]">{{ s.title }}</a>
+      </div>
+      <span class="status-badge {{ s.status }}">{{ s.status }}</span>
+    </div>
 
-<div *ngFor="let s of suggestions" (click)="goToDetails(s)">
-  <h3>{{ s.title }}</h3>
-  <p>{{ s.description }}</p>
+    <div class="card-meta">
+      <span class="category">📁 {{ s.category }}</span>
+      <span class="date">📅 {{ s.date | date : "dd MMM yyyy" }}</span>
+    </div>
+
+    <div class="card-description">
+      {{ s.description }}
+    </div>
+
+    <div class="card-actions">
+      <button class="btn-details" (click)="goToDetails(s)">🔍 Détails</button>
+
+      <button class="btn-like" (click)="likeSuggestion(s)">
+        👍 Like ({{ s.nbLikes }})
+      </button>
+
+      <button class="btn-fav" (click)="addToFavorites(s)">♡ Favoris</button>
+
+      <button class="btn-delete" (click)="deleteSuggestion(s.id)">
+        🗑️ Supprimer
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="suggestions.length === 0" class="empty-state">
+    <p>Aucune suggestion disponible.</p>
+  </div>
 </div>

@@ -1,9 +1,17 @@
 <div class="form-wrapper">
   <div class="form-card">
     <div class="form-header">
-      <div class="form-icon">💡</div>
-      <h1>Nouvelle Suggestion</h1>
-      <p>Partagez vos idées pour améliorer notre environnement de travail</p>
+      <div class="form-icon">{{ isEditMode ? "✏️" : "💡" }}</div>
+      <h1>
+        {{ isEditMode ? "Modifier la Suggestion" : "Nouvelle Suggestion" }}
+      </h1>
+      <p>
+        {{
+          isEditMode
+            ? "Modifiez les informations de votre suggestion"
+            : "Partagez vos idées pour améliorer notre environnement de travail"
+        }}
+      </p>
     </div>
 
     <form [formGroup]="suggestionForm" (ngSubmit)="submit()">
@@ -65,7 +73,17 @@
         </div>
         <div class="field">
           <label>Statut</label>
-          <input type="text" formControlName="status" />
+          <select
+            formControlName="status"
+            *ngIf="isEditMode; else staticStatus"
+          >
+            <option value="en_attente">En attente</option>
+            <option value="acceptée">Acceptée</option>
+            <option value="refusée">Refusée</option>
+          </select>
+          <ng-template #staticStatus>
+            <input type="text" formControlName="status" />
+          </ng-template>
         </div>
       </div>
 
@@ -78,7 +96,7 @@
           class="btn-submit"
           [disabled]="suggestionForm.invalid"
         >
-          Soumettre ✨
+          {{ isEditMode ? "✏️ Modifier" : "Soumettre ✨" }}
         </button>
       </div>
     </form>

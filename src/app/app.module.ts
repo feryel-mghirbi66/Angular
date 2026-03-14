@@ -8,6 +8,7 @@ import { NavComponent } from './nav/nav.component';
 import { FooterComponent } from './footer/footer.component';
 import { NotfoundComponent } from './core/notfound/notfound.component';
 import { SuggestionsModule } from './features/suggestions/suggestions.module';
+import { provideHttpClient } from '@angular/common/http';
 
 
 
@@ -27,7 +28,7 @@ import { SuggestionsModule } from './features/suggestions/suggestions.module';
     RouterModule,
     SuggestionsModule,
   ],
-  providers: [],
+  providers: [provideHttpClient()],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
